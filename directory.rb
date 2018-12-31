@@ -21,8 +21,14 @@ def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
-def print(students)
-  students.each_with_index {|student, index| puts "#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort)"}
+def print_by_letter(students)
+  puts "Enter first initial of names you would like printed"
+  letter = gets.chomp
+  students.each_with_index {|student, index|
+    if student[:name][0] == letter.upcase 
+      puts "#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  }
 end
 def print_footer(students)
   puts "Overall, we have #{students.count} great students."
@@ -30,5 +36,5 @@ end
 # nothing happens until we call the methods
 students = input_students
 print_header
-print(students)
+print_by_letter(students)
 print_footer(students)
