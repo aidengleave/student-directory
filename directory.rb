@@ -21,11 +21,9 @@ def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
-def print_by_letter(students)
-  puts "Enter first initial of names you would like printed"
-  letter = gets.chomp
+def print_if_less_than_12(students)
   students.each_with_index {|student, index|
-    if student[:name][0] == letter.upcase 
+    if student[:name].length <= 12 
       puts "#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort)"
     end
   }
@@ -36,5 +34,5 @@ end
 # nothing happens until we call the methods
 students = input_students
 print_header
-print_by_letter(students)
+print_if_less_than_12(students)
 print_footer(students)
