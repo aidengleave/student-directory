@@ -27,6 +27,7 @@ def input_students
     students << {name: name, cohort: cohort, age: age, 
     height: height, hobby: hobby}
     puts "Now we have #{students.count} students".center(100)
+    puts "Please enter another name or press return".center(100)
     # get another name from the user
     name = gets.chomp.capitalize
   end
@@ -34,24 +35,24 @@ def input_students
   students
 end
 
+def print(students)  
+  acc = 0
+  puts "Please enter first letter of names to print them".center(100)
+  initial = gets.chomp 
+  print_header
+  while acc < students.count
+    if students[acc][:name][0] == initial.upcase  
+      puts "#{acc + 1}: #{students[acc][:name]}, #{students[acc][:cohort]} cohort".center(100) 
+      puts "Age: #{students[acc][:age]}, Height: #{students[acc][:height]} cm, Hobby: #{students[acc][:hobby]}.".center(100)
+      puts "---".center(100)
+    end
+    acc += 1 
+  end
+end
+
 def print_header
   puts "The students of Villains Academy".center(100)
   puts "-------------".center(100)
-end
-
-def print(students) 
-  #Prints students by first initial if their name is less than 12 characters
-  acc = 0
-  #puts "Return names by first initial"
-  #initial = gets.chomp
-  while acc < students.count
-    #if students[acc][:name][0] == initial.upcase && students[acc][:name].length <= 12  
-    puts "#{acc + 1}: #{students[acc][:name]}, #{students[acc][:cohort]} cohort".center(100) 
-    puts "Age: #{students[acc][:age]}, Height: #{students[acc][:height]} cm, Hobby: #{students[acc][:hobby]}.
-    ".center(100)
-    #end
-    acc += 1
-  end  
 end
 
 def print_footer(students)
@@ -59,6 +60,5 @@ def print_footer(students)
 end
 # nothing happens until we call the methods
 students = input_students
-print_header
 print(students)
 print_footer(students)
