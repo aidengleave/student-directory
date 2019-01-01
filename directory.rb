@@ -3,10 +3,20 @@ def input_students
   puts "To finish, just hit return twice".center(100)
   # create an empty array
   students = []
+  cohorts = [:November, :December, :January, :February, :March]
   # get the first name
   name = gets.chomp.capitalize
   #while the name is not empty, repeat this code
   while !name.empty? do
+    puts "Enter student's cohort (November to March)".center(100)
+    cohort = gets.chomp.capitalize
+    cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
+    #if cohort == "Unknown"
+    while cohort == :undef do
+      puts "Please check your input for mistakes (November to March)".center(100)
+      cohort = gets.chomp.capitalize
+      cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
+    end
     #add the student hash to the array
     puts "Please enter student's age".center(100)
     age = gets.chomp
@@ -14,7 +24,7 @@ def input_students
     height = gets.chomp
     puts "Please enter student's hobby".center(100)
     hobby = gets.chomp
-    students << {name: name, cohort: :November, age: age, 
+    students << {name: name, cohort: cohort, age: age, 
     height: height, hobby: hobby}
     puts "Now we have #{students.count} students".center(100)
     # get another name from the user
@@ -36,7 +46,9 @@ def print(students)
   #initial = gets.chomp
   while acc < students.count
     #if students[acc][:name][0] == initial.upcase && students[acc][:name].length <= 12  
-    puts "#{acc + 1}: #{students[acc][:name]}, #{students[acc][:cohort]} cohort, Age: #{students[acc][:age]}, Height: #{students[acc][:height]} cm, Hobby: #{students[acc][:hobby]}".center(100)
+    puts "#{acc + 1}: #{students[acc][:name]}, #{students[acc][:cohort]} cohort".center(100) 
+    puts "Age: #{students[acc][:age]}, Height: #{students[acc][:height]} cm, Hobby: #{students[acc][:hobby]}.
+    ".center(100)
     #end
     acc += 1
   end  
