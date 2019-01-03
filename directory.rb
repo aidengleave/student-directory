@@ -5,25 +5,25 @@ def input_students
   students = []
   cohorts = [:November, :December, :January, :February, :March]
   # get the first name
-  name = gets.chomp.capitalize
+  name = gets.chop.capitalize
   #while the name is not empty, repeat this code
   while !name.empty? do
     puts "Enter student's cohort (November to March)".center(100)
-    cohort = gets.chomp.capitalize
+    cohort = gets.chop.capitalize
     cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
     #if cohort == "Unknown"
     while cohort == :undef do
       puts "Please check your input for mistakes (November to March)".center(100)
-      cohort = gets.chomp.capitalize
+      cohort = gets.chop.capitalize
       cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
     end
     #add the student hash to the array
     puts "Please enter student's age".center(100)
-    age = gets.chomp
+    age = gets.chop
     puts "Please enter student's height in cm".center(100)
-    height = gets.chomp
+    height = gets.chop
     puts "Please enter student's hobby".center(100)
-    hobby = gets.chomp
+    hobby = gets.chop
     students << {name: name, cohort: cohort, age: age, 
     height: height, hobby: hobby}
     
@@ -35,7 +35,7 @@ def input_students
 
     puts "Please enter another name or press return".center(100)
     # get another name from the user
-    name = gets.chomp.capitalize
+    name = gets.chop.capitalize
   end
   # return to the array of students
   students
@@ -44,7 +44,7 @@ end
 def print(students)  
   acc = 0
   puts "Please enter first letter of names to print them".center(100)
-  initial = gets.chomp 
+  initial = gets.chop 
   print_header
   while acc < students.count
     if students[acc][:name][0] == initial.upcase  
