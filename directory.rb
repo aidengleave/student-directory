@@ -26,7 +26,13 @@ def input_students
     hobby = gets.chomp
     students << {name: name, cohort: cohort, age: age, 
     height: height, hobby: hobby}
-    puts "Now we have #{students.count} students".center(100)
+    
+    if students.count == 1
+      puts "Now we have #{students.count} student".center(100)
+    else
+      puts "Now we have #{students.count} students".center(100)
+    end
+
     puts "Please enter another name or press return".center(100)
     # get another name from the user
     name = gets.chomp.capitalize
@@ -56,7 +62,11 @@ def print_header
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students.".center(100)
+  if students.count == 1
+    puts "Overall, we have #{students.count} great student.".center(100)
+  else
+    puts "Overall, we have #{students.count} great students.".center(100)
+  end
 end
 # nothing happens until we call the methods
 students = input_students
