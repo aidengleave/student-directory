@@ -6,37 +6,41 @@ def input_students
   cohorts = [:November, :December, :January, :February, :March]
   # get the first name
   name = gets.chop.capitalize
-  #while the name is not empty, repeat this code
-  while !name.empty? do
-    puts "Enter student's cohort (November to March)".center(100)
-    cohort = gets.chop.capitalize
-    cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
-    #if cohort == "Unknown"
-    while cohort == :undef do
-      puts "Please check your input for mistakes (November to March)".center(100)
+  #while the name is not empty, repeat this code  
+    if !name.empty? 
+      puts "Enter student's cohort (November to March)".center(100)
       cohort = gets.chop.capitalize
       cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
-    end
-    #add the student hash to the array
-    puts "Please enter student's age".center(100)
-    age = gets.chop
-    puts "Please enter student's height in cm".center(100)
-    height = gets.chop
-    puts "Please enter student's hobby".center(100)
-    hobby = gets.chop
-    students << {name: name, cohort: cohort, age: age, 
-    height: height, hobby: hobby}
+      #if cohort == "Unknown"
+        while cohort == :undef do
+          puts "Please check your input for mistakes (November to March)".center(100)
+          cohort = gets.chop.capitalize
+          cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
+        end
+      #add the student hash to the array
+      puts "Please enter student's age".center(100)
+      age = gets.chop
+      puts "Please enter student's height in cm".center(100)
+      height = gets.chop
+      puts "Please enter student's hobby".center(100)
+      hobby = gets.chop
+      students << {name: name, cohort: cohort, age: age, 
+      height: height, hobby: hobby}
     
-    if students.count == 1
-      puts "Now we have #{students.count} student".center(100)
-    else
-      puts "Now we have #{students.count} students".center(100)
-    end
+      if students.count == 1
+        puts "Now we have #{students.count} student".center(100)
+      else
+        puts "Now we have #{students.count} students".center(100)
+      end
 
-    puts "Please enter another name or press return".center(100)
-    # get another name from the user
-    name = gets.chop.capitalize
-  end
+      puts "Please enter another name or press return".center(100)
+      # get another name from the user
+      name = gets.chop.capitalize
+    
+    else
+      print_footer(students)
+      exit
+    end
   # return to the array of students
   students
 end
