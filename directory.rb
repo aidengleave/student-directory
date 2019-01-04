@@ -1,34 +1,46 @@
+@students = []
+
 def interactive_menu
-  students = []
   loop do
-    # 1. print the menu and ask the user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    # 2. read the input and save it into a variable
-    selection = gets.chomp
-    # 3. do what the user has asked
-    case selection
-      when "1"
-        students = input_students
-      when "2"
-        print_header
-        print(students)
-        print_footer(students)
-      when "9"
-        exit
-      else
-        puts "I don't understand, please try again"
-    end
+    print_menu
+    process(gets.chomp)
   end
 end
 
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.csv"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print_student_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+  when "1"
+    @students = input_students
+  when "2"
+    print_header
+    print_student_list
+    print_footer
+  when "3"
+    save_students
+  when "9"
+    exit
+  else
+    puts "I don't understand, please try again"
+end
+end
 
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   # create an empty array
-  students = []
   cohorts = [:November, :December, :January, :February, :March]
   # get the first name
   name = gets.chop.capitalize
@@ -54,32 +66,39 @@ def input_students
 
     #add the student hash to the array
 
-    students << {name: name, cohort: :november, age: age, 
+    @students << {name: name, cohort: cohort, age: age, 
     height: height, hobby: hobby}
     
-    if students.count == 1
-      puts "Now we have #{students.count} student"
+    if @students.count == 1
+      puts "Now we have #{@students.count} student"
     else
-      puts "Now we have #{students.count} students"
+      puts "Now we have #{@students.count} students"
     end
     # get another name from the user
     name = gets.chop.capitalize
   end
   # return to the array of students
-  students
+  @students
 end
 
-def print(students)  
+def save_students
+  # open the file for writing
+  file = File.open("students.csv", "w")
+  # iterate over the array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:age], student[:height], student[:hobby]]
+    csv_line =student_data.join(",")
+    file.puts csv_line
+  end
+  file.close 
+end
+
+def print_student_list 
   acc = 0
-  puts "Please enter first letter of names to print them"
-  initial = gets.chop 
-  print_header
-  while acc < students.count
-    if students[acc][:name][0] == initial.upcase  
-      puts "#{acc + 1}: #{students[acc][:name]}, #{students[acc][:cohort]} cohort".center(100) 
-      puts "Age: #{students[acc][:age]}, Height: #{students[acc][:height]} cm, Hobby: #{students[acc][:hobby]}.".center(100)
-      puts "---".center(100)
-    end
+  while acc < @students.count
+    puts "#{acc + 1}: #{@students[acc][:name]}, #{@students[acc][:cohort]} cohort".center(100) 
+    puts "Age: #{@students[acc][:age]}, Height: #{@students[acc][:height]} cm, Hobby: #{@students[acc][:hobby]}.".center(100)
+    puts "---".center(100)
     acc += 1 
   end
 end
@@ -89,11 +108,11 @@ def print_header
   puts "-------------".center(100)
 end
 
-def print_footer(students)
-  if students.count == 1
-    puts "Overall, we have #{students.count} great student.".center(100)
+def print_footer
+  if @students.count == 1
+    puts "Overall, we have #{@students.count} great student.".center(100)
   else
-    puts "Overall, we have #{students.count} great students.".center(100)
+    puts "Overall, we have #{@students.count} great students.".center(100)
   end
 end
 # nothing happens until we call the methods
