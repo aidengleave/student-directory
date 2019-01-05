@@ -1,7 +1,4 @@
-require 'CSV'
-
 @students = []
-@cohorts = [:November, :December, :January, :February, :March]
 
 def interactive_menu
   loop do
@@ -47,27 +44,41 @@ end
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
+  # create an empty array
+  cohorts = [:November, :December, :January, :February, :March]
+  # get the first name
   name = STDIN.gets.chop.capitalize
   #while the name is not empty, repeat this code
+   
   while !name.empty? do
     puts "Enter student's cohort (November to March)"
     cohort = STDIN.gets.chop.capitalize
-    cohort = @cohorts.include?(cohort.to_sym) ? cohort : :undef
+    cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
+        
     while cohort == :undef do
       puts "Please check your input for mistakes (November to March)"
       cohort = STDIN.gets.chop.capitalize
       cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
     end
+
     puts "Please enter student's age"
     age = STDIN.gets.chop
     puts "Please enter student's hobby"
     hobby = STDIN.gets.chop
+
     #add the student hash to the array
+
     students_hash_to_array(name, cohort, age, hobby)
-    puts "Now we have #{@students.count} student#{plural}"
-    puts "Enter another student or press return for menu"
+    
+    if @students.count == 1
+      puts "Now we have #{@students.count} student"
+    else
+      puts "Now we have #{@students.count} students"
+    end
+    # get another name from the user
     name = STDIN.gets.chop.capitalize
   end
+  # return to the array of students
   @students
 end
 
@@ -77,28 +88,33 @@ def students_hash_to_array(name, cohort, age, hobby)
 end 
 
 def save_students
-  puts "Please enter filename"
-  filename = gets.chomp
-  CSV.open(filename, "w"){|file|
+  # open the file for writing
+  file = File.open("students.csv", "w")
   # iterate over the array of students
-  @students.each {|student| file << [student[:name], student[:cohort], 
-  student[:age], student[:hobby]]}}
-  puts "Students saved to file".center(100)
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:age], student[:hobby]]
+    csv_line =student_data.join(",")
+    file.puts csv_line
+  end
+  file.close 
+  puts "Students saved to file"
 end
 
-def load_students
-  puts "Please enter filename"
-  filename = gets.chomp
-  CSV.foreach(filename){|line|
-  name, cohort, age, height, hobby = line
-  students_hash_to_array(name, cohort.to_sym, age, hobby)}
-  puts "Students loaded from file".center(100)
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
+  file.readlines.each do |line|
+  name, cohort, age, height, hobby = line.chomp.split(",")
+  students_hash_to_array(name, cohort.to_sym, age, hobby)
+  end
+  file.close
 end
 
 def try_load_students
   filename = ARGV.first # first argument from the command line
-  return if filename.nil? # get out of the method if it isn't given
-  if File.exists?(filename)
+  if filename.nil? # get out of the method if it isn't given
+    filename = "students.csv"
+    load_students
+  elsif CSV.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}."
   else
@@ -111,7 +127,7 @@ def print_student_list
   acc = 0
   while acc < @students.count
     puts "#{acc + 1}: #{@students[acc][:name]}, #{@students[acc][:cohort]} cohort".center(100) 
-    puts "Age: #{@students[acc][:age]}, Hobby: #{@students[acc][:hobby]}.".center(100)
+    puts "Age: #{@students[acc][:age]}, Height: #{@students[acc][:height]} cm, Hobby: #{@students[acc][:hobby]}.".center(100)
     puts "---".center(100)
     acc += 1 
   end
@@ -122,16 +138,12 @@ def print_header
   puts "-------------".center(100)
 end
 
-def plural
-  if @students.count == 1 
-    return ""
-  else
-    return "s"
-  end 
-end
-
 def print_footer
-  puts "Overall, we have #{@students.count} great student#{plural}.".center(100)
+  if @students.count == 1
+    puts "Overall, we have #{@students.count} great student.".center(100)
+  else
+    puts "Overall, we have #{@students.count} great students.".center(100)
+  end
 end
 # nothing happens until we call the methods
 try_load_students
