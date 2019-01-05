@@ -77,24 +77,22 @@ end
 def save_students
   puts "Please enter filename"
   filename = gets.chomp
-  file = File.open(filename, "w")
+  File.open(filename, "w"){|file|
   # iterate over the array of students
   @students.each {|student|
     student_data = [student[:name], student[:cohort], student[:age], student[:hobby]]
     csv_line =student_data.join(",")
-    file.puts csv_line}
-  file.close 
+    file.puts csv_line}}
   puts "Students saved to file".center(100)
 end
 
 def load_students
   puts "Please enter filename"
   filename = gets.chomp
-  file = File.open(filename, "r")
+  File.open(filename, "r"){|file|
   file.readlines.each {|line|
   name, cohort, age, height, hobby = line.chomp.split(",")
-  students_hash_to_array(name, cohort.to_sym, age, hobby)}
-  file.close
+  students_hash_to_array(name, cohort.to_sym, age, hobby)}}
   puts "Students loaded from file".center(100)
 end
 
