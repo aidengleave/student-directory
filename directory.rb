@@ -1,3 +1,5 @@
+require 'CSV'
+
 @students = []
 @cohorts = [:November, :December, :January, :February, :March]
 
@@ -77,22 +79,19 @@ end
 def save_students
   puts "Please enter filename"
   filename = gets.chomp
-  File.open(filename, "w"){|file|
+  CSV.open(filename, "w"){|file|
   # iterate over the array of students
-  @students.each {|student|
-    student_data = [student[:name], student[:cohort], student[:age], student[:hobby]]
-    csv_line =student_data.join(",")
-    file.puts csv_line}}
+  @students.each {|student| file << [student[:name], student[:cohort], 
+  student[:age], student[:hobby]]}}
   puts "Students saved to file".center(100)
 end
 
 def load_students
   puts "Please enter filename"
   filename = gets.chomp
-  File.open(filename, "r"){|file|
-  file.readlines.each {|line|
-  name, cohort, age, height, hobby = line.chomp.split(",")
-  students_hash_to_array(name, cohort.to_sym, age, hobby)}}
+  CSV.foreach(filename){|line|
+  name, cohort, age, height, hobby = line
+  students_hash_to_array(name, cohort.to_sym, age, hobby)}
   puts "Students loaded from file".center(100)
 end
 
