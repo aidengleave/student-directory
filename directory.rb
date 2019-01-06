@@ -56,7 +56,7 @@ def input_students
     while cohort == :undef do
       puts "Please check your input for mistakes (November to March)"
       cohort = STDIN.gets.chop.capitalize
-      cohort = cohorts.include?(cohort.to_sym) ? cohort : :undef
+      cohort = @cohorts.include?(cohort.to_sym) ? cohort : :undef
     end
     puts "Please enter student's age"
     age = STDIN.gets.chop
@@ -97,8 +97,10 @@ end
 
 def try_load_students
   filename = ARGV.first # first argument from the command line
-  return if filename.nil? # get out of the method if it isn't given
-  if File.exists?(filename)
+  if filename.nil? # get out of the method if it isn't given
+    filename = "students.csv"
+    load_students
+  elsif File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}."
   else
@@ -108,13 +110,10 @@ def try_load_students
 end
 
 def print_student_list 
-  acc = 0
-  while acc < @students.count
-    puts "#{acc + 1}: #{@students[acc][:name]}, #{@students[acc][:cohort]} cohort".center(100) 
-    puts "Age: #{@students[acc][:age]}, Hobby: #{@students[acc][:hobby]}.".center(100)
-    puts "---".center(100)
-    acc += 1 
-  end
+  @students.each_with_index {|student, index|
+    puts "#{index + 1}: #{student[:name]}, #{student[:cohort]} cohort".center(100) 
+    puts "Age: #{student[:age]}, Hobby: #{student[:hobby]}.".center(100)
+    puts "---".center(100)}
 end
 
 def print_header
